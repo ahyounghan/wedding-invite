@@ -72,14 +72,9 @@
       margin-top: 3em;
     }
 
-    .album h2 {
-      font-size: 1.2em;
-      margin-bottom: 1em;
-    }
-
     .album-grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr); /* 1줄 3장 */
+      grid-template-columns: repeat(3, 1fr);
       gap: 8px;
       max-width: 360px;
       margin: 0 auto;
@@ -105,12 +100,17 @@
       align-items: center;
       justify-content: center;
       z-index: 1000;
+      touch-action: pan-x pan-y; /* 줌 방지 */
     }
 
     #lightbox img {
       max-width: 90%;
       max-height: 90%;
       border-radius: 12px;
+      user-select: none;
+      -webkit-user-drag: none;
+      -webkit-touch-callout: none;
+      touch-action: pan-x pan-y; /* 줌 방지 */
     }
   </style>
 </head>
@@ -164,6 +164,7 @@
 
     let currentIndex = 0;
     let startX = 0;
+    let lastTouchEnd = 0;
 
     images.forEach((img, index) => {
       img.addEventListener("click", () => {
@@ -177,6 +178,7 @@
       lightboxImg.src = images[currentIndex].src;
     }
 
+    /* 닫기 */
     lightbox.addEventListener("click", () => {
       lightbox.style.display = "none";
     });
@@ -199,6 +201,20 @@
         showImage();
       }
     });
+
+    /* 더블탭 줌 방지 */
+    document.addEventListener("touchend", e => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) {
+        e.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    /* 핀치 줌 방지 (iOS) */
+    document.addEventListener("gesturestart", e => e.preventDefault());
+    document.addEventListener("gesturechange", e => e.preventDefault());
+    document.addEventListener("gestureend", e => e.preventDefault());
   </script>
 
 </body>
