@@ -61,7 +61,6 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   padding: 1.5em 1em;
   border-top: 1px solid #eee;
 }
-.account h2 { font-size: 1.1em; margin-bottom: 1em; }
 .copy { cursor: pointer; line-height: 1.8; }
 .copy-hint { font-size: .8em; color: #888; margin-top: .8em; }
 
@@ -77,14 +76,28 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   touch-action: none;
 }
 
+/* ✅ 닫기 버튼 (SVG) */
 .close {
-  position: absolute;
-  top: 18px;
-  right: 18px;
-  font-size: 26px;
-  color: white;
-  cursor: pointer;
-  z-index: 10000;
+  position: fixed;
+  top: calc(env(safe-area-inset-top) + 16px);
+  right: 16px;
+  width: 36px;
+  height: 36px;
+  background: rgba(0,0,0,.55);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10001;
+  pointer-events: auto;
+}
+
+.close svg {
+  width: 20px;
+  height: 20px;
+  stroke: white;
+  stroke-width: 2.5;
+  fill: none;
 }
 
 /* 슬라이더 */
@@ -112,7 +125,7 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
 
 /* 화살표 */
 .arrow {
-  position: absolute;
+  position: fixed;
   top: 50%;
   transform: translateY(-50%);
   width: 44px;
@@ -122,6 +135,7 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 10000;
 }
 .arrow svg {
   width: 24px;
@@ -135,10 +149,11 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
 
 /* 인디케이터 */
 .indicator {
-  position: absolute;
-  bottom: 28px;
+  position: fixed;
+  bottom: calc(env(safe-area-inset-bottom) + 28px);
   display: flex;
   gap: 8px;
+  z-index: 10000;
 }
 .dot {
   width: 8px;
@@ -174,17 +189,10 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
     <img src="photo_01.jpg">
     <img src="photo_02.jpg">
     <img src="photo_03.jpg">
-    <img src="photo_04.jpg">
-    <img src="photo_05.jpg">
-    <img src="photo_06.jpg">
-    <img src="photo_07.jpg">
-    <img src="photo_08.jpg">
-    <img src="photo_09.jpg">
   </div>
 </section>
 
 <section class="account">
-  <h2>마음 전하실 곳</h2>
   <div class="copy" data-text="국민은행 12345-67-890">신부측 · 국민은행<br>12345-67-890</div>
   <div class="copy" data-text="신한은행 54321-01-291" style="margin-top:.6em">
     신랑측 · 신한은행<br>54321-01-291
@@ -194,7 +202,13 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
 
 <!-- ===== Lightbox ===== -->
 <div id="lightbox">
-  <div class="close">✕</div>
+  <div class="close">
+    <svg viewBox="0 0 24 24">
+      <line x1="5" y1="5" x2="19" y2="19"/>
+      <line x1="19" y1="5" x2="5" y2="19"/>
+    </svg>
+  </div>
+
   <div class="arrow left"><svg viewBox="0 0 24 24"><polyline points="15 4 7 12 15 20"/></svg></div>
   <div class="slider"></div>
   <div class="arrow right"><svg viewBox="0 0 24 24"><polyline points="9 4 17 12 9 20"/></svg></div>
@@ -210,12 +224,11 @@ const slider = document.querySelector('.slider');
 const indicator = document.querySelector('.indicator');
 let index = 0, startX = 0;
 
-/* 슬라이드 생성 */
 imgs.forEach(img=>{
-  const d=document.createElement('div');
-  d.className='slide';
-  d.innerHTML=`<img src="${img.src}">`;
-  slider.appendChild(d);
+  const s=document.createElement('div');
+  s.className='slide';
+  s.innerHTML=`<img src="${img.src}">`;
+  slider.appendChild(s);
   indicator.innerHTML+=`<div class="dot"></div>`;
 });
 
@@ -233,26 +246,29 @@ imgs.forEach((img,i)=>{
   };
 });
 
-function closeLightbox(){
+function closeLB(){
   lightbox.style.display='none';
   document.body.style.overflow='';
 }
 
-lightbox.addEventListener('click', closeLightbox);
-slider.addEventListener('click', e=>e.stopPropagation());
-document.querySelectorAll('.arrow').forEach(a=>a.onclick=e=>{
-  e.stopPropagation();
-  index = a.classList.contains('left')
-    ? (index-1+imgs.length)%imgs.length
-    : (index+1)%imgs.length;
-  update();
-});
 document.querySelector('.close').onclick=e=>{
   e.stopPropagation();
-  closeLightbox();
+  closeLB();
 };
 
-/* 스와이프 */
+lightbox.onclick=closeLB;
+slider.onclick=e=>e.stopPropagation();
+
+document.querySelectorAll('.arrow').forEach(a=>{
+  a.onclick=e=>{
+    e.stopPropagation();
+    index = a.classList.contains('left')
+      ? (index-1+imgs.length)%imgs.length
+      : (index+1)%imgs.length;
+    update();
+  };
+});
+
 slider.addEventListener('touchstart',e=>startX=e.touches[0].clientX,{passive:false});
 slider.addEventListener('touchmove',e=>e.preventDefault(),{passive:false});
 slider.addEventListener('touchend',e=>{
@@ -263,12 +279,8 @@ slider.addEventListener('touchend',e=>{
   }
 });
 
-/* 계좌 복사 */
 document.querySelectorAll('.copy').forEach(c=>{
-  c.onclick=()=>{
-    navigator.clipboard.writeText(c.dataset.text);
-    alert('계좌번호가 복사되었습니다');
-  };
+  c.onclick=()=>{navigator.clipboard.writeText(c.dataset.text);alert('계좌번호가 복사되었습니다');};
 });
 </script>
 
