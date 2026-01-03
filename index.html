@@ -1,161 +1,164 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
-  <title>한아영 💍 김성국 결혼합니다</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<title>한아영 💍 김성국 결혼합니다</title>
 
-  <!-- ===== Font ===== -->
-  <style>
-    @font-face {
-      font-family: 'GabiaMaeumgyeol';
-      src: url('GabiaMaeumgyeol.woff2') format('woff2'),
-           url('GabiaMaeumgyeol.woff') format('woff'),
-           url('GabiaMaeumgyeol.otf') format('opentype'),
-           url('GabiaMaeumgyeol.ttf') format('truetype');
-      font-weight: normal;
-      font-style: normal;
-    }
+<style>
+@font-face {
+  font-family: 'GabiaMaeumgyeol';
+  src: url('GabiaMaeumgyeol.otf') format('opentype'),
+       url('GabiaMaeumgyeol.ttf') format('truetype');
+}
 
-    body {
-      font-family: 'GabiaMaeumgyeol', sans-serif;
-      background-color: #fffdfd;
-      color: #333;
-      text-align: center;
-      margin: 0 auto;
-      padding: 20px;
-      max-width: 480px;
-    }
+body {
+  font-family: 'GabiaMaeumgyeol', sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 480px;
+  background: #fffdfd;
+  text-align: center;
+  color: #333;
+}
 
-    header {
-      padding: 24px 12px;
-      margin-bottom: 24px;
-    }
+/* ===== 기본 ===== */
+header { padding: 24px 12px; }
+h1 { font-size: 1.9em; margin: .3em 0; }
+.date { margin: 0.4em 0; }
+.location { color: #666; }
 
-    h1 {
-      font-size: 1.9em;
-      margin: 0.3em 0;
-    }
+.image img {
+  width: 90%;
+  max-width: 360px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
 
-    .date {
-      font-size: 1.1em;
-      margin: 0.4em 0;
-    }
+.message { margin-top: 1.5em; line-height: 1.7; }
+.names { margin-top: 1.5em; font-size: 1.3em; font-weight: bold; }
 
-    .location {
-      font-size: 1em;
-      color: #666;
-    }
+footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
 
-    .image img {
-      width: 90%;
-      max-width: 360px;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+/* ===== Album ===== */
+.album { margin-top: 3em; }
+.album-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  max-width: 360px;
+  margin: auto;
+}
+.album-grid img {
+  width: 100%;
+  border-radius: 8px;
+  cursor: pointer;
+}
 
-    .message {
-      margin-top: 1.5em;
-      font-size: 1em;
-      line-height: 1.7;
-    }
+/* ===== Lightbox ===== */
+#lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+  touch-action: none;
+}
 
-    .names {
-      margin-top: 1.5em;
-      font-size: 1.3em;
-      font-weight: bold;
-    }
+/* 슬라이더 */
+.slider {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  transition: transform .45s cubic-bezier(.25,.8,.25,1);
+}
 
-    footer {
-      margin-top: 3em;
-      font-size: 0.9em;
-      color: #aaa;
-    }
+.slide {
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 
-    /* ===== Album ===== */
-    .album {
-      margin-top: 3em;
-    }
+.slide img {
+  max-width: 90%;
+  max-height: 80%;
+  border-radius: 12px;
+  user-select: none;
+  pointer-events: none;
+}
 
-    .album-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 8px;
-      max-width: 360px;
-      margin: 0 auto;
-    }
+/* ===== Arrow ===== */
+.arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  background: rgba(0,0,0,.45);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.arrow svg {
+  width: 24px;
+  height: 24px;
+  stroke: white;
+  stroke-width: 2.5;
+  fill: none;
+}
+.arrow.left { left: 16px; }
+.arrow.right { right: 16px; }
 
-    .album-grid img {
-      width: 100%;
-      border-radius: 8px;
-      cursor: pointer;
-    }
+/* ===== Indicator ===== */
+.indicator {
+  position: absolute;
+  bottom: 28px;
+  display: flex;
+  gap: 8px;
+}
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.4);
+}
+.dot.active { background: white; }
 
-    /* ===== Lightbox ===== */
-    #lightbox {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.85);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
-      touch-action: pan-y;
-    }
+/* ===== Account ===== */
+.account {
+  margin-top: 3em;
+  padding: 1.5em 1em;
+  border-top: 1px solid #eee;
+}
 
-    #lightbox-img {
-      max-width: 90%;
-      max-height: 80%;
-      border-radius: 12px;
-      transition: transform 0.35s ease;
-      touch-action: none;
-    }
+.account h2 {
+  font-size: 1.1em;
+  margin-bottom: 1em;
+}
 
-    /* ===== Arrows ===== */
-    .arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 44px;
-      height: 44px;
-      background: rgba(0,0,0,0.45);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 1000;
-    }
+.account-box {
+  font-size: 0.95em;
+  line-height: 1.8;
+  color: #444;
+}
 
-    .arrow svg {
-      width: 24px;
-      height: 24px;
-      stroke: white;
-      stroke-width: 2.5;
-      fill: none;
-    }
+.account-box span {
+  display: block;
+  margin-top: 0.6em;
+  cursor: pointer;
+}
 
-    .arrow.left { left: 16px; }
-    .arrow.right { right: 16px; }
-
-    /* ===== Indicator ===== */
-    .indicator {
-      position: absolute;
-      bottom: 30px;
-      display: flex;
-      gap: 8px;
-    }
-
-    .dot {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: rgba(255,255,255,0.4);
-    }
-
-    .dot.active {
-      background: white;
-    }
-  </style>
+.copy-hint {
+  margin-top: 1em;
+  font-size: 0.8em;
+  color: #888;
+}
+</style>
 </head>
 
 <body>
@@ -167,7 +170,7 @@
 </header>
 
 <div class="image">
-  <img src="Main_Image.jpg" alt="메인 사진">
+  <img src="Main_Image.jpg" alt="">
 </div>
 
 <div class="message">
@@ -177,9 +180,7 @@
   우리가 선택한 미래의 첫 장에 초대합니다.
 </div>
 
-<div class="names">
-  👰 한아영 ❤️ 🤵 김성국
-</div>
+<div class="names">👰 한아영 ❤️ 🤵 김성국</div>
 
 <section class="album">
   <div class="album-grid">
@@ -189,6 +190,25 @@
     <img src="photo_04.jpg">
     <img src="photo_05.jpg">
     <img src="photo_06.jpg">
+    <img src="photo_07.jpg">
+    <img src="photo_08.jpg">
+    <img src="photo_09.jpg">
+    <img src="photo_10.jpg">
+    <img src="photo_11.jpg">
+    <img src="photo_12.jpg">
+  </div>
+</section>
+
+<section class="account">
+  <h2>마음 전하실 곳</h2>
+  <div class="account-box">
+    <span class="copy" data-account="국민은행 12345-67-890">
+      신부측 · 국민은행<br>12345-67-890
+    </span>
+    <span class="copy" data-account="신한은행 54321-01-291">
+      신랑측 · 신한은행<br>54321-01-291
+    </span>
+    <div class="copy-hint">※ 계좌번호를 누르면 복사됩니다</div>
   </div>
 </section>
 
@@ -198,7 +218,7 @@
     <svg viewBox="0 0 24 24"><polyline points="15 4 7 12 15 20"/></svg>
   </div>
 
-  <img id="lightbox-img">
+  <div class="slider"></div>
 
   <div class="arrow right">
     <svg viewBox="0 0 24 24"><polyline points="9 4 17 12 9 20"/></svg>
@@ -207,86 +227,96 @@
   <div class="indicator"></div>
 </div>
 
-<footer>
-  © 2026 Ahyoung & SungKook Wedding
-</footer>
+<footer>© 2026 Ahyoung & SungKook Wedding</footer>
 
 <script>
-  const images = document.querySelectorAll(".album-grid img");
-  const lightbox = document.getElementById("lightbox");
-  const lightboxImg = document.getElementById("lightbox-img");
-  const indicator = document.querySelector(".indicator");
+const imgs = document.querySelectorAll('.album-grid img');
+const lightbox = document.getElementById('lightbox');
+const slider = document.querySelector('.slider');
+const indicator = document.querySelector('.indicator');
+const dots = [];
+let index = 0;
+let startX = 0;
 
-  let currentIndex = 0;
-  let startX = 0;
+/* 슬라이드 생성 */
+imgs.forEach(img => {
+  const div = document.createElement('div');
+  div.className = 'slide';
+  div.innerHTML = `<img src="${img.src}">`;
+  slider.appendChild(div);
+});
 
-  images.forEach((img, i) => {
-    img.addEventListener("click", () => {
-      currentIndex = i;
-      openLightbox();
-    });
-  });
+/* 인디케이터 생성 */
+imgs.forEach(() => {
+  const d = document.createElement('div');
+  d.className = 'dot';
+  indicator.appendChild(d);
+  dots.push(d);
+});
 
-  function openLightbox() {
-    lightbox.style.display = "flex";
-    updateImage();
-    updateDots();
-  }
+function update() {
+  slider.style.transform = `translateX(-${index * 100}%)`;
+  dots.forEach((d,i)=>d.classList.toggle('active', i===index));
+}
 
-  function closeLightbox() {
-    lightbox.style.display = "none";
-  }
-
-  function updateImage() {
-    lightboxImg.style.transform = "translateX(30px)";
-    setTimeout(() => {
-      lightboxImg.src = images[currentIndex].src;
-      lightboxImg.style.transform = "translateX(0)";
-    }, 150);
-  }
-
-  function updateDots() {
-    indicator.innerHTML = "";
-    images.forEach((_, i) => {
-      const dot = document.createElement("div");
-      dot.className = "dot" + (i === currentIndex ? " active" : "");
-      indicator.appendChild(dot);
-    });
-  }
-
-  document.querySelector(".arrow.left").onclick = e => {
-    e.stopPropagation();
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
-    updateImage();
-    updateDots();
+/* 썸네일 클릭 */
+imgs.forEach((img,i)=>{
+  img.onclick = () => {
+    index = i;
+    lightbox.style.display = 'flex';
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(update);
   };
+});
 
-  document.querySelector(".arrow.right").onclick = e => {
+/* 닫기 */
+lightbox.onclick = () => {
+  lightbox.style.display = 'none';
+  document.body.style.overflow = '';
+};
+
+/* 내부 클릭 방지 */
+slider.addEventListener('click', e => e.stopPropagation());
+
+/* 화살표 */
+document.querySelector('.arrow.left').onclick = e => {
+  e.stopPropagation();
+  index = (index - 1 + imgs.length) % imgs.length;
+  update();
+};
+document.querySelector('.arrow.right').onclick = e => {
+  e.stopPropagation();
+  index = (index + 1) % imgs.length;
+  update();
+};
+
+/* 스와이프 */
+slider.addEventListener('touchstart', e => {
+  startX = e.touches[0].clientX;
+},{passive:false});
+
+slider.addEventListener('touchmove', e => e.preventDefault(), {passive:false});
+
+slider.addEventListener('touchend', e => {
+  const diff = startX - e.changedTouches[0].clientX;
+  if (Math.abs(diff) > 50) {
+    index = diff > 0
+      ? (index + 1) % imgs.length
+      : (index - 1 + imgs.length) % imgs.length;
+    update();
+  }
+});
+</script>
+
+<script>
+/* 계좌 복사 */
+document.querySelectorAll('.copy').forEach(el => {
+  el.addEventListener('click', e => {
     e.stopPropagation();
-    currentIndex = (currentIndex + 1) % images.length;
-    updateImage();
-    updateDots();
-  };
-
-  lightbox.addEventListener("click", closeLightbox);
-
-  lightboxImg.addEventListener("touchstart", e => {
-    startX = e.touches[0].clientX;
+    navigator.clipboard.writeText(el.dataset.account)
+      .then(() => alert('계좌번호가 복사되었습니다'));
   });
-
-  lightboxImg.addEventListener("touchend", e => {
-    const diff = startX - e.changedTouches[0].clientX;
-    if (Math.abs(diff) > 50) {
-      currentIndex = diff > 0
-        ? (currentIndex + 1) % images.length
-        : (currentIndex - 1 + images.length) % images.length;
-      updateImage();
-      updateDots();
-    }
-  });
-
-  /* Zoom 방지 */
-  document.addEventListener('gesturestart', e => e.preventDefault());
+});
 </script>
 
 </body>
