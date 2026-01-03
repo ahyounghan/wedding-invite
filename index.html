@@ -2,15 +2,19 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- 핀치 줌 완전 차단 -->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+
   <title>한아영 💍 김성국 결혼합니다</title>
 
   <style>
-    /* ===== Local Font ===== */
+    /* ===== Font ===== */
     @font-face {
       font-family: 'GabiaMaeumgyeol';
-      src: url('GabiaMaeumgyeol.otf') format('opentype'),
-           url('GabiaMaeumgyeol.ttf') format('truetype');
+      src: url('./GabiaMaeumgyeol.otf') format('opentype'),
+           url('./GabiaMaeumgyeol.ttf') format('truetype');
       font-weight: normal;
       font-style: normal;
     }
@@ -20,10 +24,11 @@
       background-color: #fffdfd;
       color: #333;
       text-align: center;
-      margin: 0;
+      margin: 0 auto;
       padding: 20px;
       max-width: 480px;
-      margin: auto;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     header {
@@ -34,7 +39,6 @@
     h1 {
       font-size: 1.8em;
       margin: 0.3em 0;
-      font-weight: normal;
     }
 
     .date {
@@ -47,28 +51,23 @@
       color: #666;
     }
 
-    .image {
-      margin: 1em auto;
-    }
-
     .image img {
       width: 90%;
       max-width: 360px;
-      height: auto;
       border-radius: 12px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     .message {
       padding: 1em;
+      line-height: 1.7;
       font-size: 1em;
-      line-height: 1.8;
     }
 
     .names {
       margin-top: 1.5em;
       font-size: 1.2em;
-      font-weight: normal;
+      font-weight: bold;
     }
 
     footer {
@@ -92,7 +91,6 @@
 
     .album-grid img {
       width: 100%;
-      height: auto;
       border-radius: 8px;
       cursor: pointer;
       display: block;
@@ -101,131 +99,158 @@
     /* ===== Lightbox ===== */
     #lightbox {
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       background: rgba(0,0,0,0.85);
       display: none;
       align-items: center;
       justify-content: center;
       z-index: 1000;
-      touch-action: pan-x pan-y; /* 줌 방지 */
+      overflow: hidden;
     }
 
-    #lightbox img {
+    .lightbox-container {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #lightbox-img {
       max-width: 90%;
       max-height: 90%;
       border-radius: 12px;
+      transition: transform 0.35s ease;
+      touch-action: pan-y;
+      pointer-events: none;
+    }
+
+    /* ===== Arrows ===== */
+    .arrow {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 36px;
+      color: white;
+      cursor: pointer;
+      padding: 10px;
       user-select: none;
-      -webkit-user-drag: none;
-      -webkit-touch-callout: none;
-      touch-action: pan-x pan-y; /* 줌 방지 */
+    }
+
+    .arrow.left {
+      left: 16px;
+    }
+
+    .arrow.right {
+      right: 16px;
     }
   </style>
 </head>
 
 <body>
 
-  <header>
-    <h1>결혼합니다 💍</h1>
-    <div class="date">2026년 5월 23일 (토) 오후 12시 30분</div>
-    <div class="location">더채플앳논현 라메르홀(5F)</div>
-  </header>
+<header>
+  <h1>결혼합니다 💍</h1>
+  <div class="date">2026년 5월 23일 (토) 오후 12시 30분</div>
+  <div class="location">더채플앳논현 라메르홀(5F)</div>
+</header>
 
-  <div class="image">
-    <img src="Main_Image.jpg" alt="우리 사진">
+<div class="image">
+  <img src="Main_Image.jpg" alt="메인사진">
+</div>
+
+<div class="message">
+  좋은 인연은 설명이 필요 없고<br>
+  좋은 선택은 망설임이 없습니다.<br>
+  우리는 서로에게 그랬습니다.<br>
+  우리가 선택한 미래의 첫 장에 초대합니다.
+</div>
+
+<div class="names">
+  👰 한아영 ❤️ 🤵 김성국
+</div>
+
+<section class="album">
+  <div class="album-grid">
+    <img src="photo_01.jpg">
+    <img src="photo_02.jpg">
+    <img src="photo_03.jpg">
   </div>
+</section>
 
-  <div class="message">
-    좋은 인연은 설명이 필요 없고<br>
-    좋은 선택은 망설임이 없습니다.<br>
-    우리는 서로에게 그랬습니다.<br>
-    우리가 선택한 미래의 첫 장에 초대합니다.
+<!-- Lightbox -->
+<div id="lightbox">
+  <div class="lightbox-container">
+    <div class="arrow left">‹</div>
+    <img id="lightbox-img">
+    <div class="arrow right">›</div>
   </div>
+</div>
 
-  <div class="names">
-    👰 한아영 ❤️ 🤵 김성국
-  </div>
+<footer>
+  © 2026 Ahyoung & SungKook Wedding
+</footer>
 
-  <!-- Album -->
-  <section class="album">
-    <div class="album-grid">
-      <img src="photo_01.jpg" alt="사진1">
-      <img src="photo_02.jpg" alt="사진2">
-      <img src="photo_03.jpg" alt="사진3">
-    </div>
-  </section>
+<script>
+  const images = document.querySelectorAll(".album-grid img");
+  const lightbox = document.getElementById("lightbox");
+  const lightboxImg = document.getElementById("lightbox-img");
+  const prevBtn = document.querySelector(".arrow.left");
+  const nextBtn = document.querySelector(".arrow.right");
 
-  <!-- Lightbox -->
-  <div id="lightbox">
-    <img id="lightbox-img" src="">
-  </div>
+  let currentIndex = 0;
+  let startX = 0;
 
-  <footer>
-    © 2026 Ahyoung & SungKook Wedding
-  </footer>
+  function showImage(index, direction = 0) {
+    lightboxImg.style.transform =
+      `translateX(${direction * 30}px)`;
 
-  <!-- ===== Script ===== -->
-  <script>
-    const images = document.querySelectorAll(".album-grid img");
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImg = document.getElementById("lightbox-img");
+    setTimeout(() => {
+      lightboxImg.src = images[index].src;
+      lightboxImg.style.transform = "translateX(0)";
+    }, 150);
+  }
 
-    let currentIndex = 0;
-    let startX = 0;
-    let lastTouchEnd = 0;
-
-    images.forEach((img, index) => {
-      img.addEventListener("click", () => {
-        currentIndex = index;
-        showImage();
-        lightbox.style.display = "flex";
-      });
+  images.forEach((img, index) => {
+    img.addEventListener("click", () => {
+      currentIndex = index;
+      lightbox.style.display = "flex";
+      showImage(currentIndex);
     });
+  });
 
-    function showImage() {
-      lightboxImg.src = images[currentIndex].src;
+  lightbox.addEventListener("click", e => {
+    if (e.target === lightbox) lightbox.style.display = "none";
+  });
+
+  prevBtn.onclick = e => {
+    e.stopPropagation();
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    showImage(currentIndex, -1);
+  };
+
+  nextBtn.onclick = e => {
+    e.stopPropagation();
+    currentIndex = (currentIndex + 1) % images.length;
+    showImage(currentIndex, 1);
+  };
+
+  /* Swipe */
+  lightbox.addEventListener("touchstart", e => {
+    startX = e.touches[0].clientX;
+  });
+
+  lightbox.addEventListener("touchend", e => {
+    const diff = startX - e.changedTouches[0].clientX;
+    if (Math.abs(diff) > 50) {
+      diff > 0 ? nextBtn.onclick(e) : prevBtn.onclick(e);
     }
+  });
 
-    /* 닫기 */
-    lightbox.addEventListener("click", () => {
-      lightbox.style.display = "none";
-    });
-
-    /* Swipe */
-    lightboxImg.addEventListener("touchstart", e => {
-      startX = e.touches[0].clientX;
-    });
-
-    lightboxImg.addEventListener("touchend", e => {
-      const endX = e.changedTouches[0].clientX;
-      const diff = startX - endX;
-
-      if (Math.abs(diff) > 50) {
-        if (diff > 0) {
-          currentIndex = (currentIndex + 1) % images.length;
-        } else {
-          currentIndex = (currentIndex - 1 + images.length) % images.length;
-        }
-        showImage();
-      }
-    });
-
-    /* 더블탭 줌 방지 */
-    document.addEventListener("touchend", e => {
-      const now = Date.now();
-      if (now - lastTouchEnd <= 300) {
-        e.preventDefault();
-      }
-      lastTouchEnd = now;
-    }, false);
-
-    /* 핀치 줌 방지 (iOS) */
-    document.addEventListener("gesturestart", e => e.preventDefault());
-    document.addEventListener("gesturechange", e => e.preventDefault());
-    document.addEventListener("gestureend", e => e.preventDefault());
-  </script>
+  /* 핀치줌 차단 */
+  document.addEventListener('gesturestart', e => e.preventDefault());
+</script>
 
 </body>
 </html>
