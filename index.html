@@ -53,21 +53,36 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
 
 .album-grid img {
   width: 100%;
-  aspect-ratio: 1 / 1;   /* 🔥 모든 썸네일 동일 크기 */
-  object-fit: cover;    /* 🔥 비율 유지 + 꽉 채우기 */
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
   display: block;
 }
 
-/* ===== Account ===== */
+/* ===== Account (여기가 핵심 수정 부분) ===== */
 .account {
   margin-top: 3em;
   padding: 1.5em 1em;
   border-top: 1px solid #eee;
+
+  display: grid;                     /* 🔥 추가 */
+  grid-template-columns: 1fr 1fr;    /* 🔥 2열 */
+  gap: 0.8em 0.6em;                  /* 🔥 간격 */
 }
-.copy { cursor: pointer; line-height: 1.8; }
-.copy-hint { font-size: .8em; color: #888; margin-top: .8em; }
+
+.copy {
+  cursor: pointer;
+  line-height: 1.6;
+  padding: 0.6em 0.4em;
+}
+
+.copy-hint {
+  grid-column: span 2;               /* 🔥 2열 전체 차지 */
+  font-size: .8em;
+  color: #888;
+  margin-top: .6em;
+}
 
 /* ===== Lightbox ===== */
 #lightbox {
@@ -81,7 +96,6 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   touch-action: none;
 }
 
-/* 닫기 버튼 */
 .close {
   position: fixed;
   top: calc(env(safe-area-inset-top) + 16px);
@@ -104,7 +118,6 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   fill: none;
 }
 
-/* 슬라이더 */
 .slider {
   display: flex;
   width: 100%;
@@ -127,7 +140,6 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   pointer-events: none;
 }
 
-/* 화살표 */
 .arrow {
   position: fixed;
   top: 50%;
@@ -141,6 +153,7 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   justify-content: center;
   z-index: 10000;
 }
+
 .arrow svg {
   width: 24px;
   height: 24px;
@@ -148,10 +161,10 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   stroke-width: 2.5;
   fill: none;
 }
+
 .arrow.left { left: 16px; }
 .arrow.right { right: 16px; }
 
-/* 인디케이터 */
 .indicator {
   position: fixed;
   bottom: calc(env(safe-area-inset-bottom) + 28px);
@@ -159,6 +172,7 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   gap: 8px;
   z-index: 10000;
 }
+
 .dot {
   width: 8px;
   height: 8px;
@@ -204,7 +218,6 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
 </section>
 
 <section class="account">
-<!-- 1행 -->
   <div class="copy" data-text="국민은행 11111-22-333">
     신부측 아버지<br>국민은행 11111-22-333
   </div>
@@ -212,7 +225,6 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
     신랑측 아버지<br>신한은행 12345-67-890
   </div>
 
-  <!-- 2행 -->
   <div class="copy" data-text="국민은행 44444-55-666">
     신부측 어머니<br>국민은행 44444-55-666
   </div>
@@ -220,120 +232,19 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
     신랑측 어머니<br>신한은행 54321-01-291
   </div>
 
-  <!-- 3행 -->
   <div class="copy" data-text="국민은행 77777-88-999">
     신부<br>국민은행 77777-88-999
   </div>
   <div class="copy" data-text="신한은행 98765-43-210">
     신랑<br>신한은행 98765-43-210
   </div>
+
   <div class="copy-hint">※ 계좌번호를 누르면 복사됩니다</div>
 </section>
-
-<!-- Lightbox -->
-<div id="lightbox">
-  <div class="close">
-    <svg viewBox="0 0 24 24">
-      <line x1="5" y1="5" x2="19" y2="19"/>
-      <line x1="19" y1="5" x2="5" y2="19"/>
-    </svg>
-  </div>
-
-  <div class="arrow left">
-    <svg viewBox="0 0 24 24"><polyline points="15 4 7 12 15 20"/></svg>
-  </div>
-
-  <div class="slider"></div>
-
-  <div class="arrow right">
-    <svg viewBox="0 0 24 24"><polyline points="9 4 17 12 9 20"/></svg>
-  </div>
-
-  <div class="indicator"></div>
-</div>
 
 <footer>© 2026 Ahyoung & SungKook Wedding</footer>
 
 <script>
-const imgs = document.querySelectorAll('.album-grid img');
-const lightbox = document.getElementById('lightbox');
-const slider = document.querySelector('.slider');
-const indicator = document.querySelector('.indicator');
-
-let index = 0;
-let startX = 0;
-
-// 슬라이드 생성
-imgs.forEach(img => {
-  const s = document.createElement('div');
-  s.className = 'slide';
-  s.innerHTML = `<img src="${img.src}">`;
-  slider.appendChild(s);
-  indicator.innerHTML += `<div class="dot"></div>`;
-});
-
-function update() {
-  slider.style.transform = `translateX(-${index * 100}%)`;
-  document.querySelectorAll('.dot').forEach((d,i)=>{
-    d.classList.toggle('active', i === index);
-  });
-}
-
-// 열기
-imgs.forEach((img,i)=>{
-  img.onclick = () => {
-    index = i;
-    lightbox.style.display = 'flex';
-    document.body.style.overflow = 'hidden';
-    update();
-  };
-});
-
-// 닫기
-function closeLB() {
-  lightbox.style.display = 'none';
-  document.body.style.overflow = '';
-}
-
-document.querySelector('.close').onclick = e => {
-  e.stopPropagation();
-  closeLB();
-};
-
-lightbox.onclick = closeLB;
-slider.onclick = e => e.stopPropagation();
-
-// 화살표
-document.querySelectorAll('.arrow').forEach(a=>{
-  a.onclick = e=>{
-    e.stopPropagation();
-    index = a.classList.contains('left')
-      ? (index - 1 + imgs.length) % imgs.length
-      : (index + 1) % imgs.length;
-    update();
-  };
-});
-
-// 스와이프
-slider.addEventListener('touchstart', e=>{
-  startX = e.touches[0].clientX;
-}, {passive:false});
-
-slider.addEventListener('touchmove', e=>{
-  e.preventDefault();
-}, {passive:false});
-
-slider.addEventListener('touchend', e=>{
-  const diff = startX - e.changedTouches[0].clientX;
-  if (Math.abs(diff) > 50) {
-    index = diff > 0
-      ? (index + 1) % imgs.length
-      : (index - 1 + imgs.length) % imgs.length;
-    update();
-  }
-});
-
-// 계좌 복사
 document.querySelectorAll('.copy').forEach(c=>{
   c.onclick = ()=>{
     navigator.clipboard.writeText(c.dataset.text);
