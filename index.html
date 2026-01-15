@@ -57,28 +57,26 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   object-fit: cover;
   border-radius: 8px;
   cursor: pointer;
-  display: block;
 }
 
-/* ===== Account (여기가 핵심 수정 부분) ===== */
+/* ===== Account ===== */
 .account {
   margin-top: 3em;
   padding: 1.5em 1em;
   border-top: 1px solid #eee;
-
-  display: grid;                     /* 🔥 추가 */
-  grid-template-columns: 1fr 1fr;    /* 🔥 2열 */
-  gap: 0.8em 0.6em;                  /* 🔥 간격 */
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: .8em .6em;
 }
 
 .copy {
   cursor: pointer;
   line-height: 1.6;
-  padding: 0.6em 0.4em;
+  padding: .6em .4em;
 }
 
 .copy-hint {
-  grid-column: span 2;               /* 🔥 2열 전체 차지 */
+  grid-column: span 2;
   font-size: .8em;
   color: #888;
   margin-top: .6em;
@@ -93,165 +91,13 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   align-items: center;
   justify-content: center;
   z-index: 9999;
-  touch-action: none;
-}
-
-.close {
-  position: fixed;
-  top: calc(env(safe-area-inset-top) + 16px);
-  right: 16px;
-  width: 36px;
-  height: 36px;
-  background: rgba(0,0,0,.6);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10001;
-}
-
-.close svg {
-  width: 20px;
-  height: 20px;
-  stroke: white;
-  stroke-width: 2.5;
-  fill: none;
 }
 
 .slider {
   display: flex;
   width: 100%;
   height: 100%;
-  transition: transform .45s cubic-bezier(.4,0,.2,1);
+  transition: transform .4s ease;
 }
 
-.slide {
-  min-width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.slide img {
-  max-width: 90%;
-  max-height: 80%;
-  border-radius: 12px;
-  user-select: none;
-  pointer-events: none;
-}
-
-.arrow {
-  position: fixed;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 44px;
-  height: 44px;
-  background: rgba(0,0,0,.45);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 10000;
-}
-
-.arrow svg {
-  width: 24px;
-  height: 24px;
-  stroke: white;
-  stroke-width: 2.5;
-  fill: none;
-}
-
-.arrow.left { left: 16px; }
-.arrow.right { right: 16px; }
-
-.indicator {
-  position: fixed;
-  bottom: calc(env(safe-area-inset-bottom) + 28px);
-  display: flex;
-  gap: 8px;
-  z-index: 10000;
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: rgba(255,255,255,.4);
-}
-.dot.active { background: white; }
-</style>
-</head>
-
-<body>
-
-<header>
-  <h1>결혼합니다 💍</h1>
-  <div class="date">2026년 5월 23일 (토) 오후 12시 30분</div>
-  <div class="location">더채플앳논현 라메르홀 (5F)</div>
-</header>
-
-<div class="image"><img src="Main_Image.jpg"></div>
-
-<div class="message">
-  좋은 인연은 설명이 필요 없고<br>
-  좋은 선택은 망설임이 없습니다.<br>
-  우리는 서로에게 그랬습니다.<br><br>
-  우리가 선택한 미래의 첫 장에 초대합니다.
-</div>
-
-<div class="names">👰 한아영 ❤️ 🤵 김성국</div>
-
-<section class="album">
-  <div class="album-grid">
-    <img src="photo_01.jpg">
-    <img src="photo_03.jpg">
-    <img src="photo_04_r.png">
-    <img src="photo_05.jpg">
-    <img src="photo_06.jpg">
-    <img src="photo_08.jpg">
-    <img src="photo_09_r.png">
-    <img src="photo_10_r.png">
-    <img src="photo_11_r.png">
-    <img src="photo_12_r.jpeg">
-  </div>
-</section>
-
-<section class="account">
-  <div class="copy" data-text="우리은행 11111-22-333">
-    신부측 아버지<br>국민은행 11111-22-333
-  </div>
-  <div class="copy" data-text="신한은행 12345-67-890">
-    신랑측 아버지<br>신한은행 12345-67-890
-  </div>
-
-  <div class="copy" data-text="국민은행 22424-0237-566">
-    신부측 어머니<br>국민은행 44444-55-666
-  </div>
-  <div class="copy" data-text="신한은행 54321-01-291">
-    신랑측 어머니<br>신한은행 54321-01-291
-  </div>
-
-  <div class="copy" data-text="국민은행 695002-01-177141">
-    신부<br>국민은행 77777-88-999
-  </div>
-  <div class="copy" data-text="신한은행 98765-43-210">
-    신랑<br>신한은행 98765-43-210
-  </div>
-
-  <div class="copy-hint">※ 계좌번호를 누르면 복사됩니다</div>
-</section>
-
-<footer>© 2026 Ahyoung & SungKook Wedding</footer>
-
-<script>
-document.querySelectorAll('.copy').forEach(c=>{
-  c.onclick = ()=>{
-    navigator.clipboard.writeText(c.dataset.text);
-    alert('계좌번호가 복사되었습니다');
-  };
-});
-</script>
-
-</body>
-</html>
+.sli
