@@ -59,27 +59,23 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   cursor: pointer;
 }
 
-/* ===== Account ===== */
+/* ===== Account (1열, 원래 버전) ===== */
 .account {
   margin-top: 3em;
   padding: 1.5em 1em;
   border-top: 1px solid #eee;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: .8em .6em;
 }
 
 .copy {
   cursor: pointer;
   line-height: 1.6;
-  padding: .6em .4em;
+  padding: .8em 0;
 }
 
 .copy-hint {
-  grid-column: span 2;
   font-size: .8em;
   color: #888;
-  margin-top: .6em;
+  margin-top: .8em;
 }
 
 /* ===== Lightbox ===== */
@@ -100,4 +96,187 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   transition: transform .4s ease;
 }
 
-.sli
+.slide {
+  min-width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slide img {
+  max-width: 90%;
+  max-height: 80%;
+  border-radius: 12px;
+}
+
+.close, .arrow {
+  position: fixed;
+  background: rgba(0,0,0,.5);
+  border-radius: 50%;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+.close { top: 20px; right: 16px; }
+.arrow.left { left: 16px; top: 50%; transform: translateY(-50%); }
+.arrow.right { right: 16px; top: 50%; transform: translateY(-50%); }
+
+.close svg, .arrow svg {
+  width: 24px;
+  height: 24px;
+  stroke: white;
+  stroke-width: 2.5;
+  fill: none;
+}
+
+.indicator {
+  position: fixed;
+  bottom: 28px;
+  display: flex;
+  gap: 8px;
+  z-index: 10000;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.4);
+}
+.dot.active { background: white; }
+</style>
+</head>
+
+<body>
+
+<header>
+  <h1>결혼합니다 💍</h1>
+  <div class="date">2026년 5월 23일 (토) 오후 12시 30분</div>
+  <div class="location">더채플앳논현 라메르홀 (5F)</div>
+</header>
+
+<div class="image"><img src="Main_Image.jpg"></div>
+
+<div class="message">
+  좋은 인연은 설명이 필요 없고<br>
+  좋은 선택은 망설임이 없습니다.<br>
+  우리는 서로에게 그랬습니다.<br><br>
+  우리가 선택한 미래의 첫 장에 초대합니다.
+</div>
+
+<div class="names">👰 한아영 ❤️ 🤵 김성국</div>
+
+<section class="album">
+  <div class="album-grid">
+    <img src="photo_01.jpg">
+    <img src="photo_03.jpg">
+    <img src="photo_04_r.png">
+    <img src="photo_05.jpg">
+    <img src="photo_06.jpg">
+    <img src="photo_08.jpg">
+    <img src="photo_09_r.png">
+    <img src="photo_10_r.png">
+    <img src="photo_11_r.png">
+    <img src="photo_12_r.jpeg">
+  </div>
+</section>
+
+<section class="account">
+  <div class="copy" data-text="국민은행 11111-22-333">
+    신부측 아버지<br>국민은행 11111-22-333
+  </div>
+  <div class="copy" data-text="신한은행 12345-67-890">
+    신랑측 아버지<br>신한은행 12345-67-890
+  </div>
+  <div class="copy" data-text="국민은행 44444-55-666">
+    신부측 어머니<br>국민은행 44444-55-666
+  </div>
+  <div class="copy" data-text="신한은행 54321-01-291">
+    신랑측 어머니<br>신한은행 54321-01-291
+  </div>
+  <div class="copy" data-text="국민은행 77777-88-999">
+    신부<br>국민은행 77777-88-999
+  </div>
+  <div class="copy" data-text="신한은행 98765-43-210">
+    신랑<br>신한은행 98765-43-210
+  </div>
+  <div class="copy-hint">※ 계좌번호를 누르면 복사됩니다</div>
+</section>
+
+<footer>© 2026 Ahyoung & SungKook Wedding</footer>
+
+<!-- ===== Lightbox ===== -->
+<div id="lightbox">
+  <div class="close" id="closeBtn">
+    <svg viewBox="0 0 24 24">
+      <line x1="5" y1="5" x2="19" y2="19"/>
+      <line x1="19" y1="5" x2="5" y2="19"/>
+    </svg>
+  </div>
+
+  <div class="arrow left" id="prevBtn">
+    <svg viewBox="0 0 24 24">
+      <polyline points="15 5 8 12 15 19"/>
+    </svg>
+  </div>
+
+  <div class="arrow right" id="nextBtn">
+    <svg viewBox="0 0 24 24">
+      <polyline points="9 5 16 12 9 19"/>
+    </svg>
+  </div>
+
+  <div class="slider" id="slider"></div>
+  <div class="indicator" id="indicator"></div>
+</div>
+
+<script>
+/* 계좌 복사 */
+document.querySelectorAll('.copy').forEach(c=>{
+  c.onclick = ()=>{
+    try {
+      navigator.clipboard.writeText(c.dataset.text);
+      alert('계좌번호가 복사되었습니다');
+    } catch(e) {
+      alert('길게 눌러 복사해주세요');
+    }
+  };
+});
+
+/* 앨범 라이트박스 */
+const imgs = [...document.querySelectorAll('.album-grid img')];
+const lightbox = document.getElementById('lightbox');
+const slider = document.getElementById('slider');
+const indicator = document.getElementById('indicator');
+let idx = 0;
+
+imgs.forEach((img,i)=>{
+  slider.innerHTML += `<div class="slide"><img src="${img.src}"></div>`;
+  indicator.innerHTML += `<div class="dot"></div>`;
+  img.onclick = ()=>{ idx=i; open(); };
+});
+
+function open(){
+  lightbox.style.display='flex';
+  update();
+}
+function close(){
+  lightbox.style.display='none';
+}
+function update(){
+  slider.style.transform=`translateX(-${idx*100}%)`;
+  document.querySelectorAll('.dot').forEach((d,i)=>d.classList.toggle('active',i===idx));
+}
+
+document.getElementById('closeBtn').onclick = close;
+document.getElementById('prevBtn').onclick = ()=>{ idx=(idx-1+imgs.length)%imgs.length; update(); };
+document.getElementById('nextBtn').onclick = ()=>{ idx=(idx+1)%imgs.length; update(); };
+lightbox.onclick = e=>{ if(e.target===lightbox) close(); };
+</script>
+
+</body>
+</html>
