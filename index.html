@@ -64,6 +64,32 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   margin: 1.2em 0 .4em;
 }
 
+/* ===== Bus Check ===== */
+.bus-check {
+  margin-top: 1.2em;
+  padding: .8em;
+  border-top: 1px dashed #ddd;
+  text-align: center;
+}
+
+.bus-check h3 {
+  font-size: 1.05em;
+  margin-bottom: .6em;
+}
+
+.bus-check label {
+  margin: 0 10px;
+  font-size: .95em;
+}
+
+#bus-info {
+  display: none;
+  margin-top: .7em;
+  font-size: .9em;
+  color: #666;
+  line-height: 1.6;
+}
+
 /* ===== Album ===== */
 .album { margin-top: 3em; }
 
@@ -217,8 +243,25 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   <img src="map_r_r.png" alt="더채플앳논현 약도">
   <div class="transport">
     <h3>버스</h3>
-    간선 147, 463 / 지선 4211 / 광역 3600, 9600<br>
-    차병원(역삼방면) 하차 후 도보 50m
+    장소 : 수영역 15번 출구<br>
+    일시 : 5월 23일 06시20분<br>
+    버스 : 신우고속 부산70바7259<br>
+
+    <!-- 🚌 버스 이용 여부 체크 -->
+    <div class="bus-check">
+      <h3>🚌 셔틀버스 이용 여부</h3>
+      <label>
+        <input type="radio" name="bus" value="yes"> 이용함
+      </label>
+      <label>
+        <input type="radio" name="bus" value="no"> 이용 안함
+      </label>
+
+      <p id="bus-info">
+        ※ 셔틀버스는 <b>예식 당일 오전 6시 20분</b><br>
+        <b>수영역 15번 출구</b>에서 출발합니다.
+      </p>
+    </div>
 
     <h3>지하철</h3>
     언주역(9호선) 7번 출구 → 도보 150m<br>
@@ -293,6 +336,14 @@ document.querySelectorAll('.copy').forEach(c=>{
     navigator.clipboard.writeText(c.dataset.text);
     alert('계좌번호가 복사되었습니다');
   };
+});
+
+/* Bus check */
+document.querySelectorAll('input[name="bus"]').forEach(el => {
+  el.addEventListener('change', function () {
+    document.getElementById('bus-info').style.display =
+      this.value === 'yes' ? 'block' : 'none';
+  });
 });
 
 const imgs = [...document.querySelectorAll('.album-grid img')];
