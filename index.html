@@ -61,33 +61,7 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
 
 .transport h3 {
   font-size: 1.05em;
-  margin: 1.2em 0 .4em;
-}
-
-/* ===== Bus Check ===== */
-.bus-check {
-  margin-top: 1.2em;
-  padding: .8em;
-  border-top: 1px dashed #ddd;
-  text-align: center;
-}
-
-.bus-check h3 {
-  font-size: 1.05em;
-  margin-bottom: .6em;
-}
-
-.bus-check label {
-  margin: 0 10px;
-  font-size: .95em;
-}
-
-#bus-info {
-  display: none;
-  margin-top: .7em;
-  font-size: .9em;
-  color: #666;
-  line-height: 1.6;
+  margin: 1.4em 0 .4em;
 }
 
 /* ===== Album ===== */
@@ -241,31 +215,16 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
 
 <section class="map">
   <img src="map_r_r.png" alt="더채플앳논현 약도">
+
   <div class="transport">
-    <h3>버스</h3>
-    장소 : 수영역 15번 출구<br>
-    일시 : 5월 23일 06시20분<br>
-    버스 : 신우고속 부산70바7259<br>
-
-    <!-- 🚌 버스 이용 여부 체크 -->
-    <div class="bus-check">
-      <h3>🚌 셔틀버스 이용 여부</h3>
-      <label>
-        <input type="radio" name="bus" value="yes"> 이용함
-      </label>
-      <label>
-        <input type="radio" name="bus" value="no"> 이용 안함
-      </label>
-
-      <p id="bus-info">
-        ※ 셔틀버스는 <b>예식 당일 오전 6시 20분</b><br>
-        <b>수영역 15번 출구</b>에서 출발합니다.
-      </p>
-    </div>
-
     <h3>지하철</h3>
     언주역(9호선) 7번 출구 → 도보 150m<br>
     역삼역(2호선) 6번 출구 → 도보 450m
+
+    <h3>버스</h3>
+    장소 : 수영역 15번 출구<br>
+    일시 : 5월 23일 06시 20분<br>
+    버스 : 신우고속 부산70바7259
   </div>
 </section>
 
@@ -321,9 +280,7 @@ footer { margin: 3em 0 1em; font-size: .9em; color: #aaa; }
   </div>
 
   <div class="arrow right" id="nextBtn">
-    <svg viewBox="0 0 24 24">
-      <polyline points="9 5 16 12 9 19"/>
-    </svg>
+    <svg viewBox="9 5 16 12 9 19"></svg>
   </div>
 
   <div class="slider" id="slider"></div>
@@ -336,14 +293,6 @@ document.querySelectorAll('.copy').forEach(c=>{
     navigator.clipboard.writeText(c.dataset.text);
     alert('계좌번호가 복사되었습니다');
   };
-});
-
-/* Bus check */
-document.querySelectorAll('input[name="bus"]').forEach(el => {
-  el.addEventListener('change', function () {
-    document.getElementById('bus-info').style.display =
-      this.value === 'yes' ? 'block' : 'none';
-  });
 });
 
 const imgs = [...document.querySelectorAll('.album-grid img')];
